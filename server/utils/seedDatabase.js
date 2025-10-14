@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
 import HeroContent from "../models/HeroContent.js";
+import HomeSectionsContent from "../models/HomeSectionsContent.js";
+import AboutPageContent from "../models/AboutPageContent.js";
 import { seedServices } from "../data/seedData.js";
 
 const seedHeroContent = {
@@ -11,6 +13,27 @@ const seedHeroContent = {
   buttonLink: "tel:+5569981191606",
   imageUrl:
     "https://images.pexels.com/photos/5473185/pexels-photo-5473185.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
+};
+
+const seedHomeSectionsData = {
+  aboutSectionTitle: "Sobre",
+  aboutSectionSubtitle: "Compromisso com a Precisão e a Qualidade",
+  aboutSectionText:
+    "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada.",
+  servicesSectionTitle: "Serviços",
+  servicesSectionSubtitle: "Soluções Completas para sua Necessidade",
+};
+
+const seedAboutPageData = {
+  preTitle: "Sobre",
+  title: "Jacson Topografia & Agrimensura",
+  subtitle: "Excelência e precisão em cada projeto.",
+  imageUrl:
+    "https://adenilsongiovanini.com.br/blog/wp-content/uploads/2021/06/rtk-topografia-768x670.png",
+  paragraph1:
+    "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infra estrutura, de regularização fundiária, loteamentos, regularização ambiental, etc.",
+  paragraph2:
+    "Jacson se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada. Utilizamos equipamentos de última geração e uma equipe altamente qualificada para garantir a máxima precisão e confiabilidade em todos os nossos levantamentos e projetos.",
 };
 
 const seedDatabase = async () => {
@@ -40,6 +63,22 @@ const seedDatabase = async () => {
       console.log("No hero content found, seeding hero content...");
       await HeroContent.create(seedHeroContent);
       console.log("Hero content seeded successfully.");
+    }
+
+    // Seed Home Sections Content
+    const homeSectionsContentCount = await HomeSectionsContent.countDocuments();
+    if (homeSectionsContentCount === 0) {
+      console.log("No home sections content found, seeding...");
+      await HomeSectionsContent.create(seedHomeSectionsData);
+      console.log("Home sections content seeded successfully.");
+    }
+
+    // Seed About Page Content
+    const aboutPageContentCount = await AboutPageContent.countDocuments();
+    if (aboutPageContentCount === 0) {
+      console.log("No about page content found, seeding...");
+      await AboutPageContent.create(seedAboutPageData);
+      console.log("About page content seeded successfully.");
     }
   } catch (error) {
     console.error("Error seeding database:", error);

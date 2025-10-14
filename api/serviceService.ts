@@ -1,87 +1,80 @@
-// --- MOCK SERVICE FOR SERVICES ---
-// In a real application, this file would make API calls to your backend to get/manage services.
-// For this simulation, we use localStorage to persist the data.
+import type { Service } from "../types";
 
-import { SERVICES as seedData } from '../constants';
-import type { Service } from '../types';
-
-const STORAGE_KEY = 'gtecdrone_services';
-
-// Initialize with seed data if local storage is empty
-const initializeServices = () => {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(seedData));
-    }
+const getAuthToken = (): string | null => {
+  return sessionStorage.getItem("gtecdrone_session_token");
 };
 
-initializeServices();
-
-const getAllServicesFromStorage = (): Service[] => {
-    const data = localStorage.getItem(STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+const getAuthHeader = (): Record<string, string> => {
+  const token = getAuthToken();
+  if (token) {
+    return { Authorization: `Bearer ${token}` };
+  }
+  return {};
 };
 
-const saveAllServicesToStorage = (services: Service[]) => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(services));
+const handleResponse = async (response: Response) => {
+  if (response.status === 204) return null; // Handle No Content response for delete
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || "Ocorreu um erro na operação de serviço.");
+  }
+  return response.json();
 };
 
 export const getServices = async (): Promise<Service[]> => {
-    // Simulate network delay
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(getAllServicesFromStorage());
-        }, 200);
-    });
+  const response = await fetch("/api/services");
+  return handleResponse(response);
 };
 
-export const getServiceById = async (id: string): Promise<Service | undefined> => {
-     return new Promise(resolve => {
-        setTimeout(() => {
-            const services = getAllServicesFromStorage();
-            resolve(services.find(s => s.id === id));
-        }, 200);
-    });
+export const getServiceById = async (
+  id: string
+): Promise<Service | undefined> => {
+  const response = await fetch(`/api/services/${id}`);
+  if (response.status === 404) return undefined;
+  return handleResponse(response);
 };
 
-export const addService = async (service: Omit<Service, 'id'>): Promise<Service> => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const services = getAllServicesFromStorage();
-            const newService: Service = {
-                ...service,
-                id: service.title.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
-            };
-            services.push(newService);
-            saveAllServicesToStorage(services);
-            resolve(newService);
-        }, 500);
-    });
+export const addService = async (
+  service: Omit<Service, "id">
+): Promise<Service> => {
+  const response = await fetch("/api/services", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(service),
+  });
+  return handleResponse(response);
 };
 
-export const updateService = async (id: string, updatedServiceData: Partial<Service>): Promise<Service> => {
-     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            let services = getAllServicesFromStorage();
-            const index = services.findIndex(s => s.id === id);
-            if (index !== -1) {
-                services[index] = { ...services[index], ...updatedServiceData };
-                saveAllServicesToStorage(services);
-                resolve(services[index]);
-            } else {
-                reject(new Error("Serviço não encontrado."));
-            }
-        }, 500);
-    });
+export const updateService = async (
+  id: string,
+  updatedServiceData: Partial<Service>
+): Promise<Service> => {
+  const response = await fetch(`/api/services/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeader(),
+    },
+    body: JSON.stringify(updatedServiceData),
+  });
+  return handleResponse(response);
 };
 
-
-export const deleteService = async (id: string): Promise<{ success: boolean }> => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            let services = getAllServicesFromStorage();
-            const updatedServices = services.filter(s => s.id !== id);
-            saveAllServicesToStorage(updatedServices);
-            resolve({ success: true });
-        }, 500);
-    });
+export const deleteService = async (
+  id: string
+): Promise<{ success: boolean }> => {
+  const response = await fetch(`/api/services/${id}`, {
+    method: "DELETE",
+    headers: {
+      ...getAuthHeader(),
+    },
+  });
+  if (!response.ok) {
+    const data = await response.json();
+    throw new Error(data.message || "Falha ao excluir serviço.");
+  }
+  return { success: true };
 };
