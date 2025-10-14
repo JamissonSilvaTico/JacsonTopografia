@@ -226,7 +226,7 @@ const Header: React.FC = () => {
             >
               Contato
             </NavLink>
-             <a
+            <a
               href="https://www.linkedin.com/in/jacson-tico-592182204?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
               target="_blank"
               rel="noopener noreferrer"
@@ -235,7 +235,7 @@ const Header: React.FC = () => {
               LinkedIn
             </a>
             <a
-              href="https://wa.me/5569984318944"
+              href="https://wa.me/5569981191606"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full text-left mt-2 px-3 py-2 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 transition-colors"
