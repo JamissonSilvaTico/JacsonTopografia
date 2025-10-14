@@ -41,12 +41,14 @@ const seedDatabase = async () => {
     // Seed Admin User
     const userCount = await User.countDocuments();
     if (userCount === 0) {
-      console.log("No users found, creating admin user...");
+      console.log("No users found, creating default admin user...");
       await User.create({
-        username: "admin",
-        password: "comamor",
+        username: "jacsonadmin",
+        password: "Mudar@123",
       });
-      console.log("Admin user created successfully.");
+      console.log(
+        "Admin user 'jacsonadmin' created. Please change this password after your first login."
+      );
     }
 
     // Seed Services

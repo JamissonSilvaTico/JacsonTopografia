@@ -12,21 +12,37 @@ import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
-// Fallback for missing .env file in development
-if (process.env.NODE_ENV !== "production") {
-  if (!process.env.MONGO_URI) {
-    console.warn(
-      "WARNING: MONGO_URI not found in .env file. Using default local MongoDB connection."
+// --- Environment Variable Validation ---
+// In production, the app will exit if these are not set.
+// In development, it provides fallbacks for convenience.
+if (!process.env.MONGO_URI) {
+  if (process.env.NODE_ENV === "production") {
+    console.error(
+      "FATAL ERROR: MONGO_URI environment variable is not defined."
     );
-    process.env.MONGO_URI = "mongodb://127.0.0.1:27017/gtec-drone";
-  }
-  if (!process.env.JWT_SECRET) {
+    process.exit(1);
+  } else {
     console.warn(
-      "WARNING: JWT_SECRET not found in .env file. Using a default secret. THIS IS INSECURE FOR PRODUCTION."
+      "WARNING: MONGO_URI not found. Using local fallback for development."
+    );
+    process.env.MONGO_URI = "mongodb://127.0.0.1:27017/jacson-topografia";
+  }
+}
+
+if (!process.env.JWT_SECRET) {
+  if (process.env.NODE_ENV === "production") {
+    console.error(
+      "FATAL ERROR: JWT_SECRET environment variable is not defined."
+    );
+    process.exit(1);
+  } else {
+    console.warn(
+      "WARNING: JWT_SECRET not found. Using insecure fallback for development."
     );
     process.env.JWT_SECRET = "temporary-secret-for-development";
   }
 }
+// --- End Validation ---
 
 connectDB().then(() => {
   seedDatabase();
