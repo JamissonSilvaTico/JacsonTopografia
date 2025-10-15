@@ -1,8 +1,4 @@
-import type {
-  HeroContent,
-  HomeSectionsContent,
-  AboutPageContent,
-} from "../types";
+import type { HeroContent, AboutPageContent } from "../types";
 
 const SESSION_TOKEN_KEY = "gtecdrone_session_token";
 
@@ -36,27 +32,6 @@ export const updateHeroContent = async (
   content: HeroContent
 ): Promise<HeroContent> => {
   const response = await fetch("/api/content/hero", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      ...getAuthHeader(),
-    },
-    body: JSON.stringify(content),
-  });
-  return handleResponse(response);
-};
-
-// --- Home Page Sections ---
-export const getHomeSectionsContent =
-  async (): Promise<HomeSectionsContent> => {
-    const response = await fetch("/api/content/homesections");
-    return handleResponse(response);
-  };
-
-export const updateHomeSectionsContent = async (
-  content: HomeSectionsContent
-): Promise<HomeSectionsContent> => {
-  const response = await fetch("/api/content/homesections", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

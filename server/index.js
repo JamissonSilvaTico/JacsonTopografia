@@ -10,6 +10,7 @@ import serviceRoutes from "./routes/services.js";
 import contentRoutes from "./routes/content.js";
 import authRoutes from "./routes/auth.js";
 import settingsRoutes from "./routes/settings.js";
+import homeSectionsRoutes from "./routes/homePageSections.js";
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use("/api/services", serviceRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/home-sections", homeSectionsRoutes);
 
 // --- DEPLOYMENT CONFIGURATION ---
 const __filename = fileURLToPath(import.meta.url);

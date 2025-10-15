@@ -15,12 +15,14 @@ export interface HeroContent {
   imageUrl: string;
 }
 
-export interface HomeSectionsContent {
-  aboutSectionTitle: string;
-  aboutSectionSubtitle: string;
-  aboutSectionText: string;
-  servicesSectionTitle: string;
-  servicesSectionSubtitle: string;
+export interface HomePageSection {
+  _id: string;
+  title: string;
+  subtitle?: string;
+  content?: string;
+  type: "text" | "services";
+  order: number;
+  visible: boolean;
 }
 
 export interface AboutPageContent {

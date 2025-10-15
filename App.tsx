@@ -20,6 +20,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import HeroEditorPage from "./pages/admin/HeroEditorPage";
 import AboutEditorPage from "./pages/admin/AboutEditorPage";
 import SiteSettingsPage from "./pages/admin/SiteSettingsPage";
+import HomePageSectionsPage from "./pages/admin/HomePageSectionsPage";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -54,6 +55,7 @@ const AppContent: React.FC = () => {
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="hero" element={<HeroEditorPage />} />
+            <Route path="home-sections" element={<HomePageSectionsPage />} />
             <Route path="about" element={<AboutEditorPage />} />
             <Route path="settings" element={<SiteSettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />

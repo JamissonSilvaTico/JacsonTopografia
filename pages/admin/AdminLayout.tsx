@@ -42,7 +42,18 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({
           }
           onClick={toggle}
         >
-          <span className="mx-3">Página Inicial</span>
+          <span className="mx-3">Seção Principal (Hero)</span>
+        </NavLink>
+        <NavLink
+          to="/admin/home-sections"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 mt-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors ${
+              isActive ? "bg-gray-700 text-white" : ""
+            }`
+          }
+          onClick={toggle}
+        >
+          <span className="mx-3">Seções da Home</span>
         </NavLink>
         <NavLink
           to="/admin/about"
@@ -134,7 +145,9 @@ const AdminLayout: React.FC = () => {
       case "/admin/dashboard":
         return "Gerenciamento de Serviços";
       case "/admin/hero":
-        return "Editor da Página Inicial";
+        return "Editor da Seção Principal (Hero)";
+      case "/admin/home-sections":
+        return "Gerenciador de Seções da Home";
       case "/admin/about":
         return 'Editor da Página "Sobre"';
       case "/admin/settings":

@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Service from "../models/Service.js";
 import HeroContent from "../models/HeroContent.js";
-import HomeSectionsContent from "../models/HomeSectionsContent.js";
+import HomePageSection from "../models/HomePageSection.js";
 import AboutPageContent from "../models/AboutPageContent.js";
 import SiteSettings from "../models/SiteSettings.js";
 import { seedServices } from "../data/seedData.js";
@@ -16,14 +16,24 @@ const seedHeroContent = {
     "https://images.pexels.com/photos/5473185/pexels-photo-5473185.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080",
 };
 
-const seedHomeSectionsData = {
-  aboutSectionTitle: "Sobre",
-  aboutSectionSubtitle: "Compromisso com a Precisão e a Qualidade",
-  aboutSectionText:
-    "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada.",
-  servicesSectionTitle: "Serviços",
-  servicesSectionSubtitle: "Soluções Completas para sua Necessidade",
-};
+const seedHomePageSections = [
+  {
+    title: "Sobre",
+    subtitle: "Compromisso com a Precisão e a Qualidade",
+    content:
+      "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada.",
+    type: "text",
+    order: 1,
+    visible: true,
+  },
+  {
+    title: "Serviços",
+    subtitle: "Soluções Completas para sua Necessidade",
+    type: "services",
+    order: 2,
+    visible: true,
+  },
+];
 
 const seedAboutPageData = {
   preTitle: "Sobre",
@@ -75,12 +85,12 @@ const seedDatabase = async () => {
       console.log("Hero content seeded successfully.");
     }
 
-    // Seed Home Sections Content
-    const homeSectionsContentCount = await HomeSectionsContent.countDocuments();
-    if (homeSectionsContentCount === 0) {
-      console.log("No home sections content found, seeding...");
-      await HomeSectionsContent.create(seedHomeSectionsData);
-      console.log("Home sections content seeded successfully.");
+    // Seed Home Page Sections
+    const homeSectionsCount = await HomePageSection.countDocuments();
+    if (homeSectionsCount === 0) {
+      console.log("No home page sections found, seeding...");
+      await HomePageSection.insertMany(seedHomePageSections);
+      console.log("Home page sections seeded successfully.");
     }
 
     // Seed About Page Content
