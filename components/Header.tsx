@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { getServices } from "../api/serviceService";
-import { Service } from "../types";
+import { getSiteSettings } from "../api/settingsService";
+import { Service, SiteSettings } from "../types";
 
 const ServicesDropdown: React.FC<{
   services: Service[];
@@ -55,13 +56,27 @@ const Header: React.FC = () => {
   const [isServicesOpen, setServicesOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [services, setServices] = useState<Service[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
     const fetchServices = async () => {
-      const data = await getServices();
-      setServices(data);
+      try {
+        const data = await getServices();
+        setServices(data);
+      } catch (error) {
+        console.error("Failed to fetch services:", error);
+      }
+    };
+    const fetchSettings = async () => {
+      try {
+        const data = await getSiteSettings();
+        setSiteSettings(data);
+      } catch (error) {
+        console.error("Failed to fetch site settings:", error);
+      }
     };
     fetchServices();
+    fetchSettings();
   }, []);
 
   const navLinkClasses =
@@ -71,17 +86,42 @@ const Header: React.FC = () => {
   const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
     `${navLinkClasses} ${isActive ? activeNavLinkClasses : ""}`;
 
+  const renderLogo = () => {
+    if (!siteSettings) {
+      return (
+        <div className="h-10 w-40 animate-pulse">
+          <div className="h-5 bg-gray-200 rounded w-24 mb-2"></div>
+          <div className="h-3 bg-gray-200 rounded w-32"></div>
+        </div>
+      );
+    }
+
+    if (siteSettings.logoType === "image" && siteSettings.logoImageUrl) {
+      return (
+        <img
+          src={siteSettings.logoImageUrl}
+          alt="Logo Jacson Topografia"
+          className="h-14 w-auto"
+        />
+      );
+    }
+
+    return (
+      <div className="text-xl font-bold text-gray-800">
+        <span className="text-sky-600">{siteSettings.logoTextLine1}</span>
+        <span className="text-sm font-normal text-gray-500 block -mt-1">
+          {siteSettings.logoTextLine2}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex-shrink-0">
-            <Link to="/" className="text-xl font-bold text-gray-800">
-              <span className="text-sky-600">Jacson</span>
-              <span className="text-sm font-normal text-gray-500 block -mt-1">
-                Topografia & Agrimensura
-              </span>
-            </Link>
+            <Link to="/">{renderLogo()}</Link>
           </div>
           <div className="hidden md:block">
             <nav className="ml-10 flex items-baseline space-x-4">

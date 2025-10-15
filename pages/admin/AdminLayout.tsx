@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { logout } from "../../api/authService";
@@ -55,6 +54,17 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({
           onClick={toggle}
         >
           <span className="mx-3">Página Sobre</span>
+        </NavLink>
+        <NavLink
+          to="/admin/settings"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 mt-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors ${
+              isActive ? "bg-gray-700 text-white" : ""
+            }`
+          }
+          onClick={toggle}
+        >
+          <span className="mx-3">Configurações</span>
         </NavLink>
         <NavLink
           to="/admin/profile"
@@ -127,6 +137,8 @@ const AdminLayout: React.FC = () => {
         return "Editor da Página Inicial";
       case "/admin/about":
         return 'Editor da Página "Sobre"';
+      case "/admin/settings":
+        return "Configurações do Site";
       case "/admin/profile":
         return "Configuração de Perfil";
       default:

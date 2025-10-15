@@ -1,26 +1,37 @@
-
-import React from 'react';
-import { HashRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import ServicePage from './pages/ServicePage';
-import LoginPage from './pages/admin/LoginPage';
-import AdminLayout from './pages/admin/AdminLayout';
-import DashboardPage from './pages/admin/DashboardPage';
-import ProfilePage from './pages/admin/ProfilePage';
-import ProtectedRoute from './components/ProtectedRoute';
-import HeroEditorPage from './pages/admin/HeroEditorPage';
-import AboutEditorPage from './pages/admin/AboutEditorPage';
+import React from "react";
+import {
+  HashRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
+import AboutPage from "./pages/AboutPage";
+import ContactPage from "./pages/ContactPage";
+import ServicePage from "./pages/ServicePage";
+import LoginPage from "./pages/admin/LoginPage";
+import AdminLayout from "./pages/admin/AdminLayout";
+import DashboardPage from "./pages/admin/DashboardPage";
+import ProfilePage from "./pages/admin/ProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import HeroEditorPage from "./pages/admin/HeroEditorPage";
+import AboutEditorPage from "./pages/admin/AboutEditorPage";
+import SiteSettingsPage from "./pages/admin/SiteSettingsPage";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname === '/login';
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") || location.pathname === "/login";
 
   return (
-    <div className={`flex flex-col min-h-screen ${isAdminRoute ? 'bg-gray-100' : 'bg-gray-50'} text-gray-800`}>
+    <div
+      className={`flex flex-col min-h-screen ${
+        isAdminRoute ? "bg-gray-100" : "bg-gray-50"
+      } text-gray-800`}
+    >
       {!isAdminRoute && <Header />}
       <main className="flex-grow">
         <Routes>
@@ -32,8 +43,8 @@ const AppContent: React.FC = () => {
 
           {/* Admin Routes */}
           <Route path="/login" element={<LoginPage />} />
-          <Route 
-            path="/admin" 
+          <Route
+            path="/admin"
             element={
               <ProtectedRoute>
                 <AdminLayout />
@@ -44,6 +55,7 @@ const AppContent: React.FC = () => {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="hero" element={<HeroEditorPage />} />
             <Route path="about" element={<AboutEditorPage />} />
+            <Route path="settings" element={<SiteSettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Routes>
@@ -52,7 +64,6 @@ const AppContent: React.FC = () => {
     </div>
   );
 };
-
 
 const App: React.FC = () => {
   return (

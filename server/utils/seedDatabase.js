@@ -3,6 +3,7 @@ import Service from "../models/Service.js";
 import HeroContent from "../models/HeroContent.js";
 import HomeSectionsContent from "../models/HomeSectionsContent.js";
 import AboutPageContent from "../models/AboutPageContent.js";
+import SiteSettings from "../models/SiteSettings.js";
 import { seedServices } from "../data/seedData.js";
 
 const seedHeroContent = {
@@ -34,6 +35,13 @@ const seedAboutPageData = {
     "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infra estrutura, de regularização fundiária, loteamentos, regularização ambiental, etc.",
   paragraph2:
     "Jacson se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada. Utilizamos equipamentos de última geração e uma equipe altamente qualificada para garantir a máxima precisão e confiabilidade em todos os nossos levantamentos e projetos.",
+};
+
+const seedSiteSettings = {
+  logoType: "text",
+  logoTextLine1: "Jacson",
+  logoTextLine2: "Topografia & Agrimensura",
+  logoImageUrl: "",
 };
 
 const seedDatabase = async () => {
@@ -81,6 +89,14 @@ const seedDatabase = async () => {
       console.log("No about page content found, seeding...");
       await AboutPageContent.create(seedAboutPageData);
       console.log("About page content seeded successfully.");
+    }
+
+    // Seed Site Settings
+    const settingsCount = await SiteSettings.countDocuments();
+    if (settingsCount === 0) {
+      console.log("No site settings found, seeding...");
+      await SiteSettings.create(seedSiteSettings);
+      console.log("Site settings seeded successfully.");
     }
   } catch (error) {
     console.error("Error seeding database:", error);

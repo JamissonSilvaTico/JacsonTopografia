@@ -1,4 +1,3 @@
-
 export interface Service {
   id: string;
   title: string;
@@ -31,4 +30,11 @@ export interface AboutPageContent {
   imageUrl: string;
   paragraph1: string;
   paragraph2: string;
+}
+
+export interface SiteSettings {
+  logoType: "text" | "image";
+  logoTextLine1: string;
+  logoTextLine2: string;
+  logoImageUrl: string;
 }
