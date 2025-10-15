@@ -11,15 +11,22 @@ const Hero: React.FC = () => {
 
   useEffect(() => {
     const fetchContent = async () => {
-      const data = await getHeroContent();
-      setContent(data);
+      try {
+        const data = await getHeroContent();
+        setContent(data);
+      } catch (error) {
+        console.error("Failed to fetch hero content:", error);
+      }
     };
     fetchContent();
   }, []);
 
   if (!content) {
     return (
-      <div className="relative bg-gray-900" style={{ height: "576px" }}>
+      <div
+        className="relative bg-gray-200 animate-pulse"
+        style={{ height: "576px" }}
+      >
         {/* Placeholder for loading state */}
       </div>
     );
@@ -60,46 +67,85 @@ const Hero: React.FC = () => {
   );
 };
 
-const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => (
-  <div className="py-16 bg-white overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-          {section.title}
-        </h2>
-        <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-          {section.subtitle}
-        </p>
-        <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-          {section.content}
-        </p>
+const AboutSection: React.FC = () => {
+  const [section, setSection] = useState<HomePageSection | null>(null);
+
+  useEffect(() => {
+    const fetchSectionData = async () => {
+      try {
+        const sections = await getHomePageSections();
+        const aboutSection = sections.find((s) => s.type === "text");
+        setSection(aboutSection || null);
+      } catch (error) {
+        console.error(
+          "Could not fetch About section data, will use fallbacks.",
+          error
+        );
+      }
+    };
+    fetchSectionData();
+  }, []);
+
+  if (section && !section.visible) {
+    return null;
+  }
+
+  return (
+    <div className="py-16 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+            {section?.title || "Sobre"}
+          </h2>
+          <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+            {section?.subtitle || "Compromisso com a Precisão e a Qualidade"}
+          </p>
+          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+            {section?.content ||
+              "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada."}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
-const ServicesSection: React.FC<{ section: HomePageSection }> = ({
-  section,
-}) => {
+const ServicesSection: React.FC = () => {
+  const [section, setSection] = useState<HomePageSection | null>(null);
   const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
-    const fetchServices = async () => {
-      const data = await getServices();
-      setServices(data);
+    const fetchAllData = async () => {
+      try {
+        const sections = await getHomePageSections();
+        const servicesSection = sections.find((s) => s.type === "services");
+        setSection(servicesSection || null);
+
+        const servicesData = await getServices();
+        setServices(servicesData);
+      } catch (error) {
+        console.error(
+          "Could not fetch Services section data, will use fallbacks.",
+          error
+        );
+      }
     };
-    fetchServices();
+    fetchAllData();
   }, []);
+
+  if ((section && !section.visible) || services.length === 0) {
+    return null;
+  }
 
   return (
     <div className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            {section.title}
+            {section?.title || "Serviços"}
           </h2>
           <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            {section.subtitle}
+            {section?.subtitle || "Soluções Completas para sua Necessidade"}
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -141,54 +187,36 @@ const ServicesSection: React.FC<{ section: HomePageSection }> = ({
   );
 };
 
-const Home: React.FC = () => {
-  const [sections, setSections] = useState<HomePageSection[]>([]);
-  const [loading, setLoading] = useState(true);
+const CompaniesSectionWrapper: React.FC = () => {
+  const [section, setSection] = useState<HomePageSection | null>(null);
 
   useEffect(() => {
-    const fetchSections = async () => {
-      setLoading(true);
+    const fetchSectionData = async () => {
       try {
-        const data = await getHomePageSections();
-        setSections(data);
+        const sections = await getHomePageSections();
+        const companiesSection = sections.find((s) => s.type === "companies");
+        setSection(companiesSection || null);
       } catch (error) {
-        console.error("Failed to fetch home page sections:", error);
-      } finally {
-        setLoading(false);
+        console.error("Could not fetch Companies section data.", error);
       }
     };
-    fetchSections();
+    fetchSectionData();
   }, []);
 
-  const renderSection = (section: HomePageSection) => {
-    switch (section.type) {
-      case "text":
-        return <TextSection key={section._id} section={section} />;
-      case "services":
-        return <ServicesSection key={section._id} section={section} />;
-      case "companies":
-        return (
-          <CompaniesSection
-            key={section._id}
-            title={section.title}
-            subtitle={section.subtitle}
-          />
-        );
-      default:
-        return null;
-    }
-  };
+  if (!section || !section.visible) {
+    return null;
+  }
 
+  return <CompaniesSection title={section.title} subtitle={section.subtitle} />;
+};
+
+const Home: React.FC = () => {
   return (
     <>
       <Hero />
-      {loading ? (
-        <div className="py-20 text-center">
-          <p>Carregando conteúdo...</p>
-        </div>
-      ) : (
-        sections.map(renderSection)
-      )}
+      <AboutSection />
+      <ServicesSection />
+      <CompaniesSectionWrapper />
     </>
   );
 };
