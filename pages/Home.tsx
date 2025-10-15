@@ -4,6 +4,7 @@ import { getServices } from "../api/serviceService";
 import { getHeroContent } from "../api/contentService";
 import { getHomePageSections } from "../api/homeSectionsService";
 import { Service, HeroContent, HomePageSection } from "../types";
+import CompaniesSection from "../components/CompaniesSection";
 
 const Hero: React.FC = () => {
   const [content, setContent] = useState<HeroContent | null>(null);
@@ -205,6 +206,7 @@ const Home: React.FC = () => {
     <>
       <Hero />
       {sections.map((section) => renderSection(section))}
+      <CompaniesSection />
     </>
   );
 };
