@@ -16,39 +16,19 @@ const CompaniesSection: React.FC<CompaniesSectionProps> = ({
 
   useEffect(() => {
     const fetchCompanies = async () => {
+      setLoading(true);
       try {
         const data = await getCompanies();
         setCompanies(data);
       } catch (error) {
         console.error("Failed to fetch companies:", error);
+        setCompanies([]); // Garante que não fique em um estado de erro
       } finally {
         setLoading(false);
       }
     };
     fetchCompanies();
   }, []);
-
-  if (loading) {
-    return (
-      <div className="bg-white py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="h-8 bg-gray-200 rounded-md w-1/3 mx-auto animate-pulse"></div>
-          <div className="mx-auto mt-16 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="h-12 bg-gray-200 rounded-md animate-pulse"
-              ></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (companies.length === 0) {
-    return null;
-  }
 
   return (
     <div className="bg-white py-16 sm:py-24">
@@ -63,21 +43,33 @@ const CompaniesSection: React.FC<CompaniesSectionProps> = ({
             </p>
           )}
         </div>
-        <div className="mx-auto mt-16 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-          {companies.map((company) => (
-            <div
-              key={company._id}
-              className="col-span-1 flex justify-center"
-              title={company.name}
-            >
-              <img
-                src={company.logoUrl}
-                alt={company.name}
-                className="max-h-12 w-auto filter grayscale hover:grayscale-0 transition duration-300 ease-in-out"
-              />
-            </div>
-          ))}
-        </div>
+
+        {loading ? (
+          <div className="mx-auto mt-16 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-5">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="h-12 bg-gray-200 rounded-md animate-pulse"
+              ></div>
+            ))}
+          </div>
+        ) : companies.length > 0 ? (
+          <div className="mx-auto mt-16 grid max-w-lg grid-cols-2 items-center gap-x-8 gap-y-12 sm:max-w-xl sm:grid-cols-3 lg:mx-0 lg:max-w-none lg:grid-cols-5">
+            {companies.map((company) => (
+              <div
+                key={company._id}
+                className="col-span-1 flex justify-center"
+                title={company.name}
+              >
+                <img
+                  src={company.logoUrl}
+                  alt={company.name}
+                  className="max-h-12 w-auto filter grayscale hover:grayscale-0 transition duration-300 ease-in-out"
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     </div>
   );
