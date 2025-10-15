@@ -20,7 +20,7 @@ export interface HomePageSection {
   title: string;
   subtitle?: string;
   content?: string;
-  type: "text" | "services";
+  type: "text" | "services" | "companies";
   order: number;
   visible: boolean;
   imageUrl?: string;
@@ -45,6 +45,6 @@ export interface SiteSettings {
 export interface Company {
   _id: string;
   name: string;
-  logoSvg: string;
+  logoUrl: string;
   order: number;
 }

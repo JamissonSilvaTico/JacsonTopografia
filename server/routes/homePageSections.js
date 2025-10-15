@@ -99,11 +99,13 @@ router.delete("/:id", protect, async (req, res) => {
     const section = await HomePageSection.findById(req.params.id);
 
     if (section) {
-      // Prevent deletion of 'services' section to avoid breaking site logic
-      if (section.type === "services") {
+      // Prevent deletion of system sections to avoid breaking site logic
+      if (section.type === "services" || section.type === "companies") {
         return res
           .status(400)
-          .json({ message: 'A seção de "Serviços" não pode ser excluída.' });
+          .json({
+            message: `A seção "${section.title}" é uma seção do sistema e não pode ser excluída.`,
+          });
       }
       await section.deleteOne();
       res.status(204).send();

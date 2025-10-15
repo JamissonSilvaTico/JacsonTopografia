@@ -82,6 +82,8 @@ const SectionFormModal: React.FC<{
 
   if (!isOpen) return null;
 
+  const isSystemSection = section?.type !== "text";
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 z-40 flex justify-center items-center p-4">
       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl max-h-full overflow-y-auto">
@@ -110,28 +112,36 @@ const SectionFormModal: React.FC<{
               className="w-full px-3 py-2 border rounded"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Conteúdo (Parágrafo)</label>
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-              rows={5}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">
-              URL da Imagem (Opcional)
-            </label>
-            <input
-              type="url"
-              name="imageUrl"
-              value={formData.imageUrl}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
+
+          {!isSystemSection && (
+            <>
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  Conteúdo (Parágrafo)
+                </label>
+                <textarea
+                  name="content"
+                  value={formData.content}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                  rows={5}
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">
+                  URL da Imagem (Opcional)
+                </label>
+                <input
+                  type="url"
+                  name="imageUrl"
+                  value={formData.imageUrl}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+            </>
+          )}
+
           <div className="mb-4">
             <label className="block text-gray-700">Ordem de Exibição</label>
             <input
@@ -252,7 +262,7 @@ const HomePageSectionsPage: React.FC = () => {
               <div>
                 <h3 className="text-lg font-bold text-gray-800">
                   {section.title}{" "}
-                  {section.type === "services" && (
+                  {section.type !== "text" && (
                     <span className="text-xs bg-gray-200 text-gray-600 font-medium ml-2 px-2 py-1 rounded-full">
                       SISTEMA
                     </span>
@@ -309,7 +319,7 @@ const HomePageSectionsPage: React.FC = () => {
                 >
                   Editar
                 </button>
-                {section.type !== "services" && (
+                {section.type === "text" && (
                   <button
                     onClick={() => handleDelete(section._id)}
                     className="text-red-600 hover:text-red-900 p-2"

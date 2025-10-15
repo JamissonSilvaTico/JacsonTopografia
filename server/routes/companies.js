@@ -20,9 +20,9 @@ router.get("/", async (req, res) => {
 // @route   POST /api/companies
 // @access  Private/Admin
 router.post("/", protect, async (req, res) => {
-  const { name, logoSvg, order } = req.body;
+  const { name, logoUrl, order } = req.body;
   try {
-    const company = new Company({ name, logoSvg, order });
+    const company = new Company({ name, logoUrl, order });
     const createdCompany = await company.save();
     res.status(201).json(createdCompany);
   } catch (error) {
@@ -34,12 +34,12 @@ router.post("/", protect, async (req, res) => {
 // @route   PUT /api/companies/:id
 // @access  Private/Admin
 router.put("/:id", protect, async (req, res) => {
-  const { name, logoSvg, order } = req.body;
+  const { name, logoUrl, order } = req.body;
   try {
     const company = await Company.findById(req.params.id);
     if (company) {
       company.name = name ?? company.name;
-      company.logoSvg = logoSvg ?? company.logoSvg;
+      company.logoUrl = logoUrl ?? company.logoUrl;
       company.order = order ?? company.order;
 
       const updatedCompany = await company.save();

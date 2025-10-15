@@ -197,6 +197,14 @@ const Home: React.FC = () => {
         return <TextSection key={section._id} section={section} />;
       case "services":
         return <ServicesSection key={section._id} section={section} />;
+      case "companies":
+        return (
+          <CompaniesSection
+            key={section._id}
+            title={section.title}
+            subtitle={section.subtitle}
+          />
+        );
       default:
         return null;
     }
@@ -206,7 +214,6 @@ const Home: React.FC = () => {
     <>
       <Hero />
       {sections.map((section) => renderSection(section))}
-      <CompaniesSection />
     </>
   );
 };

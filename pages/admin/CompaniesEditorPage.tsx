@@ -17,7 +17,7 @@ const CompanyFormModal: React.FC<{
 }> = ({ isOpen, onClose, onSave, company }) => {
   const [formData, setFormData] = useState<CompanyFormData>({
     name: "",
-    logoSvg: "",
+    logoUrl: "",
     order: 0,
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -26,11 +26,11 @@ const CompanyFormModal: React.FC<{
     if (company) {
       setFormData({
         name: company.name,
-        logoSvg: company.logoSvg,
+        logoUrl: company.logoUrl,
         order: company.order,
       });
     } else {
-      setFormData({ name: "", logoSvg: "", order: 0 });
+      setFormData({ name: "", logoUrl: "", order: 0 });
     }
   }, [company, isOpen]);
 
@@ -83,18 +83,18 @@ const CompanyFormModal: React.FC<{
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Código SVG do Logo</label>
-            <textarea
-              name="logoSvg"
-              value={formData.logoSvg}
+            <label className="block text-gray-700">URL do Logo</label>
+            <input
+              type="url"
+              name="logoUrl"
+              value={formData.logoUrl}
               onChange={handleChange}
-              className="w-full px-3 py-2 border rounded font-mono"
-              rows={8}
+              className="w-full px-3 py-2 border rounded"
+              placeholder="https://exemplo.com/logo.png"
               required
             />
             <p className="text-sm text-gray-500 mt-1">
-              Cole o código completo do SVG. Certifique-se que o SVG tenha
-              atributos de altura e/ou largura (ex: `class="h-10 w-auto"`).
+              Insira o link direto para a imagem do logo.
             </p>
           </div>
           <div className="mb-4">
@@ -211,10 +211,13 @@ const CompaniesEditorPage: React.FC = () => {
                 {companies.map((company) => (
                   <tr key={company._id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div
-                        className="w-32 h-12 flex items-center justify-start text-gray-700"
-                        dangerouslySetInnerHTML={{ __html: company.logoSvg }}
-                      />
+                      <div className="w-32 h-12 flex items-center justify-start">
+                        <img
+                          src={company.logoUrl}
+                          alt={company.name}
+                          className="max-h-12 max-w-full"
+                        />
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {company.name}
