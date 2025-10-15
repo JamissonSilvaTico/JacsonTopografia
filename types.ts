@@ -41,3 +41,10 @@ export interface SiteSettings {
   logoTextLine2: string;
   logoImageUrl: string;
 }
+
+export interface Company {
+  _id: string;
+  name: string;
+  logoSvg: string;
+  order: number;
+}

@@ -56,6 +56,17 @@ const Sidebar: React.FC<{ isOpen: boolean; toggle: () => void }> = ({
           <span className="mx-3">Seções da Home</span>
         </NavLink>
         <NavLink
+          to="/admin/companies"
+          className={({ isActive }) =>
+            `flex items-center px-6 py-3 mt-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors ${
+              isActive ? "bg-gray-700 text-white" : ""
+            }`
+          }
+          onClick={toggle}
+        >
+          <span className="mx-3">Empresas Parceiras</span>
+        </NavLink>
+        <NavLink
           to="/admin/about"
           className={({ isActive }) =>
             `flex items-center px-6 py-3 mt-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors ${
@@ -148,6 +159,8 @@ const AdminLayout: React.FC = () => {
         return "Editor da Seção Principal (Hero)";
       case "/admin/home-sections":
         return "Gerenciador de Seções da Home";
+      case "/admin/companies":
+        return "Gerenciador de Empresas Parceiras";
       case "/admin/about":
         return 'Editor da Página "Sobre"';
       case "/admin/settings":

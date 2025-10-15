@@ -21,6 +21,7 @@ import HeroEditorPage from "./pages/admin/HeroEditorPage";
 import AboutEditorPage from "./pages/admin/AboutEditorPage";
 import SiteSettingsPage from "./pages/admin/SiteSettingsPage";
 import HomePageSectionsPage from "./pages/admin/HomePageSectionsPage";
+import CompaniesEditorPage from "./pages/admin/CompaniesEditorPage";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -56,6 +57,7 @@ const AppContent: React.FC = () => {
             <Route path="dashboard" element={<DashboardPage />} />
             <Route path="hero" element={<HeroEditorPage />} />
             <Route path="home-sections" element={<HomePageSectionsPage />} />
+            <Route path="companies" element={<CompaniesEditorPage />} />
             <Route path="about" element={<AboutEditorPage />} />
             <Route path="settings" element={<SiteSettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />

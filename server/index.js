@@ -11,6 +11,7 @@ import contentRoutes from "./routes/content.js";
 import authRoutes from "./routes/auth.js";
 import settingsRoutes from "./routes/settings.js";
 import homeSectionsRoutes from "./routes/homePageSections.js";
+import companyRoutes from "./routes/companies.js";
 
 dotenv.config();
 
@@ -60,6 +61,7 @@ app.use("/api/content", contentRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/home-sections", homeSectionsRoutes);
+app.use("/api/companies", companyRoutes);
 
 // --- DEPLOYMENT CONFIGURATION ---
 const __filename = fileURLToPath(import.meta.url);
