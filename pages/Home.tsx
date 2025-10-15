@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { getServices } from "../api/serviceService";
 import { getHeroContent } from "../api/contentService";
 import { getHomePageSections } from "../api/homeSectionsService";
-import { Service, HeroContent, HomePageSection } from "../types";
+import { getCompanies } from "../api/companyService";
+import { Service, HeroContent, HomePageSection, Company } from "../types";
 import CompaniesSection from "../components/CompaniesSection";
 
 const Hero: React.FC = () => {
@@ -67,156 +68,144 @@ const Hero: React.FC = () => {
   );
 };
 
-const AboutSection: React.FC = () => {
-  const [section, setSection] = useState<HomePageSection | null>(null);
-
-  useEffect(() => {
-    const fetchSectionData = async () => {
-      try {
-        const sections = await getHomePageSections();
-        const aboutSection = sections.find((s) => s.type === "text");
-        setSection(aboutSection || null);
-      } catch (error) {
-        console.error(
-          "Could not fetch About section data, will use fallbacks.",
-          error
-        );
-      }
-    };
-    fetchSectionData();
-  }, []);
-
-  if (section && !section.visible) {
-    return null;
-  }
-
-  return (
-    <div className="py-16 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            {section?.title || "Sobre"}
-          </h2>
-          <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            {section?.subtitle || "Compromisso com a Precisão e a Qualidade"}
-          </p>
-          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-            {section?.content ||
-              "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada."}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ServicesSection: React.FC = () => {
-  const [section, setSection] = useState<HomePageSection | null>(null);
-  const [services, setServices] = useState<Service[]>([]);
+const Home: React.FC = () => {
+  const [pageData, setPageData] = useState<{
+    sections: HomePageSection[];
+    services: Service[];
+    companies: Company[];
+  } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAllData = async () => {
+      setIsLoading(true);
       try {
-        const sections = await getHomePageSections();
-        const servicesSection = sections.find((s) => s.type === "services");
-        setSection(servicesSection || null);
-
-        const servicesData = await getServices();
-        setServices(servicesData);
+        // Fetch all data in parallel
+        const [sectionsData, servicesData, companiesData] = await Promise.all([
+          getHomePageSections(),
+          getServices(),
+          getCompanies(),
+        ]);
+        setPageData({
+          sections: sectionsData || [],
+          services: servicesData || [],
+          companies: companiesData || [],
+        });
       } catch (error) {
-        console.error(
-          "Could not fetch Services section data, will use fallbacks.",
-          error
-        );
+        console.error("Falha ao carregar os dados da página inicial:", error);
+        // Set empty data to prevent crash, fallbacks will be used
+        setPageData({ sections: [], services: [], companies: [] });
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchAllData();
   }, []);
 
-  if ((section && !section.visible) || services.length === 0) {
-    return null;
-  }
-
-  return (
-    <div className="py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            {section?.title || "Serviços"}
-          </h2>
-          <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            {section?.subtitle || "Soluções Completas para sua Necessidade"}
-          </p>
-        </div>
-        <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className="flex flex-col rounded-lg shadow-lg overflow-hidden group"
-            >
-              <div className="flex-shrink-0">
-                <img
-                  className="h-48 w-full object-cover"
-                  src={service.imageUrl}
-                  alt={service.title}
-                />
-              </div>
-              <div className="flex-1 bg-white p-6 flex flex-col justify-between">
-                <div className="flex-1">
-                  <p className="text-xl font-semibold text-gray-900">
-                    {service.title}
-                  </p>
-                  <p className="mt-3 text-base text-gray-500">
-                    {service.shortDescription}
-                  </p>
-                </div>
-                <div className="mt-6">
-                  <Link
-                    to={`/servicos/${service.id}`}
-                    className="text-base font-semibold text-sky-600 hover:text-sky-500 group-hover:underline"
-                  >
-                    Saiba mais <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+  const aboutSectionData = pageData?.sections.find((s) => s.type === "text");
+  const servicesSectionData = pageData?.sections.find(
+    (s) => s.type === "services"
   );
-};
+  const companiesSectionData = pageData?.sections.find(
+    (s) => s.type === "companies"
+  );
 
-const CompaniesSectionWrapper: React.FC = () => {
-  const [section, setSection] = useState<HomePageSection | null>(null);
-
-  useEffect(() => {
-    const fetchSectionData = async () => {
-      try {
-        const sections = await getHomePageSections();
-        const companiesSection = sections.find((s) => s.type === "companies");
-        setSection(companiesSection || null);
-      } catch (error) {
-        console.error("Could not fetch Companies section data.", error);
-      }
-    };
-    fetchSectionData();
-  }, []);
-
-  if (!section || !section.visible) {
-    return null;
-  }
-
-  return <CompaniesSection title={section.title} subtitle={section.subtitle} />;
-};
-
-const Home: React.FC = () => {
   return (
     <>
       <Hero />
-      <AboutSection />
-      <ServicesSection />
-      <CompaniesSectionWrapper />
+      {isLoading ? (
+        <div className="text-center py-24">
+          <p className="text-xl text-gray-500">Carregando conteúdo...</p>
+        </div>
+      ) : (
+        pageData && (
+          <>
+            {/* About Section */}
+            {(aboutSectionData?.visible ?? true) && (
+              <div className="py-16 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center">
+                    <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+                      {aboutSectionData?.title || "Sobre"}
+                    </h2>
+                    <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                      {aboutSectionData?.subtitle ||
+                        "Compromisso com a Precisão e a Qualidade"}
+                    </p>
+                    <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                      {aboutSectionData?.content ||
+                        "Jacson presta serviços de topografia, agrimensura, georreferenciamento de imóvel rural, retificação de área, usucapião, levantamento topográfico planialtimétrico para projetos de infraestrutura, de regularização fundiária, loteamentos, regularização ambiental, etc. A empresa se destaca por prestar serviços direcionados a exigência e a necessidade de cada cliente de forma exclusiva e personalizada."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Services Section */}
+            {(servicesSectionData?.visible ?? true) &&
+              pageData.services.length > 0 && (
+                <div className="py-16 bg-gray-50">
+                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                      <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+                        {servicesSectionData?.title || "Serviços"}
+                      </h2>
+                      <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                        {servicesSectionData?.subtitle ||
+                          "Soluções Completas para sua Necessidade"}
+                      </p>
+                    </div>
+                    <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+                      {pageData.services.map((service) => (
+                        <div
+                          key={service.id}
+                          className="flex flex-col rounded-lg shadow-lg overflow-hidden group"
+                        >
+                          <div className="flex-shrink-0">
+                            <img
+                              className="h-48 w-full object-cover"
+                              src={service.imageUrl}
+                              alt={service.title}
+                            />
+                          </div>
+                          <div className="flex-1 bg-white p-6 flex flex-col justify-between">
+                            <div className="flex-1">
+                              <p className="text-xl font-semibold text-gray-900">
+                                {service.title}
+                              </p>
+                              <p className="mt-3 text-base text-gray-500">
+                                {service.shortDescription}
+                              </p>
+                            </div>
+                            <div className="mt-6">
+                              <Link
+                                to={`/servicos/${service.id}`}
+                                className="text-base font-semibold text-sky-600 hover:text-sky-500 group-hover:underline"
+                              >
+                                Saiba mais{" "}
+                                <span aria-hidden="true">&rarr;</span>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            {/* Companies Section */}
+            {(companiesSectionData?.visible ?? true) &&
+              pageData.companies.length > 0 && (
+                <CompaniesSection
+                  title={companiesSectionData?.title || "Empresas Parceiras"}
+                  subtitle={companiesSectionData?.subtitle || ""}
+                  companies={pageData.companies}
+                />
+              )}
+          </>
+        )
+      )}
     </>
   );
 };
