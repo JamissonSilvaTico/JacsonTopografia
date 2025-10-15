@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { getServices } from "../api/serviceService";
 import { getHeroContent } from "../api/contentService";
 import { Service, HeroContent } from "../types";
+import CompaniesSection from "../components/CompaniesSection";
 
 const Hero: React.FC = () => {
   const [content, setContent] = useState<HeroContent | null>(null);
@@ -63,19 +64,18 @@ const AboutSection: React.FC = () => (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center">
         <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-          Sobre Jacson Topografia
+          Sobre
         </h2>
         <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
           Compromisso com a Precisão e a Qualidade
         </p>
         <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-          Sou prestador de serviços de topografia, agrimensura,
-          georreferenciamento de imóvel rural, retificação de área, usucapião,
-          levantamento topográfico planialtimétrico para projetos de
-          infraestrutura, de regularização fundiária, loteamentos, regularização
-          ambiental, etc. A empresa se destaca por prestar serviços direcionados
-          a exigência e a necessidade de cada cliente de forma exclusiva e
-          personalizada.
+          Jacson presta serviços de topografia, agrimensura, georreferenciamento
+          de imóvel rural, retificação de área, usucapião, levantamento
+          topográfico planialtimétrico para projetos de infraestrutura, de
+          regularização fundiária, loteamentos, regularização ambiental, etc. A
+          empresa se destaca por prestar serviços direcionados a exigência e a
+          necessidade de cada cliente de forma exclusiva e personalizada.
         </p>
       </div>
     </div>
@@ -149,6 +149,10 @@ const Home: React.FC = () => {
       <Hero />
       <AboutSection />
       <ServicesSection />
+      <CompaniesSection
+        title="Empresas Parceiras"
+        subtitle="Confiança e credibilidade no mercado."
+      />
     </>
   );
 };
