@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getServices } from "../api/serviceService";
 import { getHeroContent } from "../api/contentService";
-import { Service, HeroContent } from "../types";
+import { getHomePageSections } from "../api/homeSectionsService";
+import { Service, HeroContent, HomePageSection } from "../types";
 import CompaniesSection from "../components/CompaniesSection";
 
 const Hero: React.FC = () => {
@@ -59,30 +60,27 @@ const Hero: React.FC = () => {
   );
 };
 
-const AboutSection: React.FC = () => (
+const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => (
   <div className="py-16 bg-white overflow-hidden">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center">
         <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-          Sobre
+          {section.title}
         </h2>
         <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-          Compromisso com a Precisão e a Qualidade
+          {section.subtitle}
         </p>
         <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-          Jacson presta serviços de topografia, agrimensura, georreferenciamento
-          de imóvel rural, retificação de área, usucapião, levantamento
-          topográfico planialtimétrico para projetos de infraestrutura, de
-          regularização fundiária, loteamentos, regularização ambiental, etc. A
-          empresa se destaca por prestar serviços direcionados a exigência e a
-          necessidade de cada cliente de forma exclusiva e personalizada.
+          {section.content}
         </p>
       </div>
     </div>
   </div>
 );
 
-const ServicesSection: React.FC = () => {
+const ServicesSection: React.FC<{ section: HomePageSection }> = ({
+  section,
+}) => {
   const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
@@ -98,10 +96,10 @@ const ServicesSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            Serviços
+            {section.title}
           </h2>
           <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            Soluções Completas para sua Necessidade
+            {section.subtitle}
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -144,15 +142,53 @@ const ServicesSection: React.FC = () => {
 };
 
 const Home: React.FC = () => {
+  const [sections, setSections] = useState<HomePageSection[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSections = async () => {
+      setLoading(true);
+      try {
+        const data = await getHomePageSections();
+        setSections(data);
+      } catch (error) {
+        console.error("Failed to fetch home page sections:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchSections();
+  }, []);
+
+  const renderSection = (section: HomePageSection) => {
+    switch (section.type) {
+      case "text":
+        return <TextSection key={section._id} section={section} />;
+      case "services":
+        return <ServicesSection key={section._id} section={section} />;
+      case "companies":
+        return (
+          <CompaniesSection
+            key={section._id}
+            title={section.title}
+            subtitle={section.subtitle}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <Hero />
-      <AboutSection />
-      <ServicesSection />
-      <CompaniesSection
-        title="Empresas Parceiras"
-        subtitle="Confiança e credibilidade no mercado."
-      />
+      {loading ? (
+        <div className="py-20 text-center">
+          <p>Carregando conteúdo...</p>
+        </div>
+      ) : (
+        sections.map(renderSection)
+      )}
     </>
   );
 };
