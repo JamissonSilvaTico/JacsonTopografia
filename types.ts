@@ -24,7 +24,6 @@ export interface HomePageSection {
   order: number;
   visible: boolean;
   imageUrl?: string;
-  imagePosition?: "left" | "right";
 }
 
 export interface AboutPageContent {

@@ -62,53 +62,51 @@ const Hero: React.FC = () => {
 const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => {
   const hasImage = section.imageUrl && section.imageUrl.trim() !== "";
 
+  if (hasImage) {
+    return (
+      <div className="relative bg-gray-800">
+        <div className="absolute inset-0">
+          <img
+            className="w-full h-full object-cover"
+            src={section.imageUrl}
+            alt={section.title}
+          />
+          <div className="absolute inset-0 bg-gray-900 opacity-60"></div>
+        </div>
+        <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-base font-semibold text-sky-400 tracking-wide uppercase">
+            {section.title}
+          </h2>
+          <p className="mt-2 text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
+            {section.subtitle}
+          </p>
+          {section.content && (
+            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300">
+              {section.content}
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback for sections without an image
   return (
     <div className="py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {hasImage ? (
-          <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
-            <div
-              className={`relative ${
-                section.imagePosition === "right" ? "lg:order-2" : ""
-              }`}
-            >
-              <img
-                className="rounded-lg shadow-xl w-full"
-                src={section.imageUrl}
-                alt={section.title}
-              />
-            </div>
-            <div
-              className={`relative mt-10 lg:mt-0 ${
-                section.imagePosition === "right" ? "lg:order-1" : ""
-              }`}
-            >
-              <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-                {section.title}
-              </h2>
-              <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-                {section.subtitle}
-              </p>
-              {section.content && (
-                <p className="mt-4 text-lg text-gray-500">{section.content}</p>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="text-center">
-            <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-              {section.title}
-            </h2>
-            <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-              {section.subtitle}
+        <div className="text-center">
+          <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+            {section.title}
+          </h2>
+          <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+            {section.subtitle}
+          </p>
+          {section.content && (
+            <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+              {section.content}
             </p>
-            {section.content && (
-              <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-                {section.content}
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

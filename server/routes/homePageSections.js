@@ -34,8 +34,7 @@ router.get("/all", protect, async (req, res) => {
 // @route   POST /api/home-sections
 // @access  Private/Admin
 router.post("/", protect, async (req, res) => {
-  const { title, subtitle, content, order, visible, imageUrl, imagePosition } =
-    req.body;
+  const { title, subtitle, content, order, visible, imageUrl } = req.body;
   try {
     const section = new HomePageSection({
       title,
@@ -44,7 +43,6 @@ router.post("/", protect, async (req, res) => {
       order,
       visible,
       imageUrl,
-      imagePosition,
       type: "text", // User-created sections are always 'text'
     });
     const createdSection = await section.save();
@@ -66,7 +64,6 @@ router.put("/:id", protect, async (req, res) => {
       section.title = req.body.title ?? section.title;
       section.order = req.body.order ?? section.order;
       section.visible = req.body.visible ?? section.visible;
-      section.imagePosition = req.body.imagePosition ?? section.imagePosition;
 
       if (req.body.hasOwnProperty("subtitle")) {
         section.subtitle = req.body.subtitle;

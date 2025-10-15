@@ -13,7 +13,6 @@ const homePageSectionSchema = new mongoose.Schema({
   order: { type: Number, default: 0 },
   visible: { type: Boolean, default: true },
   imageUrl: { type: String },
-  imagePosition: { type: String, enum: ["left", "right"], default: "left" },
 });
 
 const HomePageSection = mongoose.model(

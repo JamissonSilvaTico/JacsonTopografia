@@ -22,7 +22,6 @@ const SectionFormModal: React.FC<{
     order: 0,
     visible: true,
     imageUrl: "",
-    imagePosition: "left",
   });
   const [isSaving, setIsSaving] = useState(false);
 
@@ -35,7 +34,6 @@ const SectionFormModal: React.FC<{
         order: section.order,
         visible: section.visible,
         imageUrl: section.imageUrl || "",
-        imagePosition: section.imagePosition || "left",
       });
     } else {
       setFormData({
@@ -45,7 +43,6 @@ const SectionFormModal: React.FC<{
         order: 0,
         visible: true,
         imageUrl: "",
-        imagePosition: "left",
       });
     }
   }, [section, isOpen]);
@@ -135,38 +132,6 @@ const SectionFormModal: React.FC<{
               className="w-full px-3 py-2 border rounded"
             />
           </div>
-
-          {formData.imageUrl && (
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">
-                Posição da Imagem
-              </label>
-              <div className="flex items-center space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="imagePosition"
-                    value="left"
-                    checked={formData.imagePosition === "left"}
-                    onChange={handleChange}
-                    className="form-radio h-4 w-4 text-sky-600"
-                  />
-                  <span className="ml-2 text-gray-700">Esquerda</span>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="imagePosition"
-                    value="right"
-                    checked={formData.imagePosition === "right"}
-                    onChange={handleChange}
-                    className="form-radio h-4 w-4 text-sky-600"
-                  />
-                  <span className="ml-2 text-gray-700">Direita</span>
-                </label>
-              </div>
-            </div>
-          )}
           <div className="mb-4">
             <label className="block text-gray-700">Ordem de Exibição</label>
             <input
