@@ -140,7 +140,39 @@ const Header: React.FC = () => {
               </a>
             </nav>
           </div>
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            <a
+              href="https://wa.me/5569981191606"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-md text-green-500 hover:text-green-600 hover:bg-gray-100"
+              aria-label="WhatsApp"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.956-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.225 4.485 4.635-1.218zM8.332 9.554c-.135-.271-.271-.271-.406-.271-.135 0-.271 0-.406 0-.135 0-.338.068-.541.338-.203.271-.811.811-.811 1.984s.811 2.318.946 2.484c.135.166 1.621 2.593 3.961 3.504.541.203.946.338 1.282.406.541.135.946.102 1.282-.068.37-.167 1.621-.745 1.857-1.487.236-.745.236-1.383.167-1.487-.068-.102-.203-.167-.406-.271s-1.621-.81-1.857-.912c-.236-.102-.406-.167-.541.167-.135.338-.71.811-.878.979-.167.167-.338.203-.541.068-.203-.135-.811-.304-1.554-.946-.576-.473-.979-.946-1.114-1.114-.135-.167-.034-.236.068-.338.068-.068.167-.203.236-.271.034-.034.068-.068.102-.135.034-.068.034-.135 0-.236-.034-.102-.541-1.283-.745-1.72z" />
+              </svg>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/jacson-tico-592182204?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 rounded-md text-blue-700 hover:text-blue-800 hover:bg-gray-100"
+              aria-label="LinkedIn"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-7 w-7"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+              </svg>
+            </a>
             <button
               onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-sky-500"
@@ -226,22 +258,6 @@ const Header: React.FC = () => {
             >
               Contato
             </NavLink>
-            <a
-              href="https://www.linkedin.com/in/jacson-tico-592182204?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-left mt-2 px-3 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-700 hover:bg-blue-800 transition-colors"
-            >
-              LinkedIn
-            </a>
-            <a
-              href="https://wa.me/5569981191606"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-left mt-2 px-3 py-2 border border-transparent text-base font-medium rounded-md text-white bg-green-500 hover:bg-green-600 transition-colors"
-            >
-              WhatsApp
-            </a>
           </div>
         </div>
       )}
