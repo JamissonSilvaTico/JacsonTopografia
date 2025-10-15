@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getServices } from "../api/serviceService";
 import { getHeroContent } from "../api/contentService";
-import { getHomePageSections } from "../api/homeSectionsService";
-import { Service, HeroContent, HomePageSection } from "../types";
-import CompaniesSection from "../components/CompaniesSection";
+import { Service, HeroContent } from "../types";
 
 const Hero: React.FC = () => {
   const [content, setContent] = useState<HeroContent | null>(null);
@@ -60,62 +58,31 @@ const Hero: React.FC = () => {
   );
 };
 
-const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => {
-  const hasImage = section.imageUrl && section.imageUrl.trim() !== "";
-
-  if (hasImage) {
-    return (
-      <div className="relative bg-gray-800">
-        <div className="absolute inset-0">
-          <img
-            className="w-full h-full object-cover"
-            src={section.imageUrl}
-            alt={section.title}
-          />
-          <div className="absolute inset-0 bg-gray-900 opacity-60"></div>
-        </div>
-        <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-base font-semibold text-sky-400 tracking-wide uppercase">
-            {section.title}
-          </h2>
-          <p className="mt-2 text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
-            {section.subtitle}
-          </p>
-          {section.content && (
-            <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-300">
-              {section.content}
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Fallback for sections without an image
-  return (
-    <div className="py-16 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            {section.title}
-          </h2>
-          <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            {section.subtitle}
-          </p>
-          {section.content && (
-            <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-              {section.content}
-            </p>
-          )}
-        </div>
+const AboutSection: React.FC = () => (
+  <div className="py-16 bg-white overflow-hidden">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="text-center">
+        <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+          Sobre Jacson Topografia
+        </h2>
+        <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+          Compromisso com a Precisão e a Qualidade
+        </p>
+        <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+          Sou prestador de serviços de topografia, agrimensura,
+          georreferenciamento de imóvel rural, retificação de área, usucapião,
+          levantamento topográfico planialtimétrico para projetos de
+          infraestrutura, de regularização fundiária, loteamentos, regularização
+          ambiental, etc. A empresa se destaca por prestar serviços direcionados
+          a exigência e a necessidade de cada cliente de forma exclusiva e
+          personalizada.
+        </p>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
-const ServicesSection: React.FC<{ section: HomePageSection }> = ({
-  section,
-}) => {
+const ServicesSection: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
 
   useEffect(() => {
@@ -131,10 +98,10 @@ const ServicesSection: React.FC<{ section: HomePageSection }> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-            {section.title}
+            Serviços
           </h2>
           <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-            {section.subtitle}
+            Soluções Completas para sua Necessidade
           </p>
         </div>
         <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -177,43 +144,11 @@ const ServicesSection: React.FC<{ section: HomePageSection }> = ({
 };
 
 const Home: React.FC = () => {
-  const [sections, setSections] = useState<HomePageSection[]>([]);
-
-  useEffect(() => {
-    const fetchSections = async () => {
-      try {
-        const data = await getHomePageSections();
-        setSections(data);
-      } catch (error) {
-        console.error("Failed to fetch home page sections:", error);
-      }
-    };
-    fetchSections();
-  }, []);
-
-  const renderSection = (section: HomePageSection) => {
-    switch (section.type) {
-      case "text":
-        return <TextSection key={section._id} section={section} />;
-      case "services":
-        return <ServicesSection key={section._id} section={section} />;
-      case "companies":
-        return (
-          <CompaniesSection
-            key={section._id}
-            title={section.title}
-            subtitle={section.subtitle}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <>
       <Hero />
-      {sections.map((section) => renderSection(section))}
+      <AboutSection />
+      <ServicesSection />
     </>
   );
 };
