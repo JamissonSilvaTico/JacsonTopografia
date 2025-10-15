@@ -23,6 +23,8 @@ export interface HomePageSection {
   type: "text" | "services";
   order: number;
   visible: boolean;
+  imageUrl?: string;
+  imagePosition?: "left" | "right";
 }
 
 export interface AboutPageContent {

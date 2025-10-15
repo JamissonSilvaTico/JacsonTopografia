@@ -59,23 +59,60 @@ const Hero: React.FC = () => {
   );
 };
 
-const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => (
-  <div className="py-16 bg-white overflow-hidden">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="text-center">
-        <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
-          {section.title}
-        </h2>
-        <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-          {section.subtitle}
-        </p>
-        <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
-          {section.content}
-        </p>
+const TextSection: React.FC<{ section: HomePageSection }> = ({ section }) => {
+  const hasImage = section.imageUrl && section.imageUrl.trim() !== "";
+
+  return (
+    <div className="py-16 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {hasImage ? (
+          <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+            <div
+              className={`relative ${
+                section.imagePosition === "right" ? "lg:order-2" : ""
+              }`}
+            >
+              <img
+                className="rounded-lg shadow-xl w-full"
+                src={section.imageUrl}
+                alt={section.title}
+              />
+            </div>
+            <div
+              className={`relative mt-10 lg:mt-0 ${
+                section.imagePosition === "right" ? "lg:order-1" : ""
+              }`}
+            >
+              <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+                {section.title}
+              </h2>
+              <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                {section.subtitle}
+              </p>
+              {section.content && (
+                <p className="mt-4 text-lg text-gray-500">{section.content}</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <h2 className="text-base font-semibold text-sky-600 tracking-wide uppercase">
+              {section.title}
+            </h2>
+            <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+              {section.subtitle}
+            </p>
+            {section.content && (
+              <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
+                {section.content}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ServicesSection: React.FC<{ section: HomePageSection }> = ({
   section,
