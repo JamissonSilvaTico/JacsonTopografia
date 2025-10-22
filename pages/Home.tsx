@@ -101,7 +101,6 @@ const Home: React.FC = () => {
           companies: companiesData || [],
           projects: projectsData || [],
         });
-        // FIX: Corrected invalid `catch (error) =>` syntax to `catch (error)`.
       } catch (error) {
         console.error("Falha ao carregar os dados da página inicial:", error);
         setPageData({
@@ -307,16 +306,14 @@ const Home: React.FC = () => {
               }
             })}
 
-            {companySectionData &&
-              companySectionData.visible &&
-              pageData.companies.length > 0 && (
-                <CompaniesSection
-                  key={companySectionData._id}
-                  title={companySectionData.title}
-                  subtitle={companySectionData.subtitle}
-                  companies={pageData.companies}
-                />
-              )}
+            {companySectionData && companySectionData.visible && (
+              <CompaniesSection
+                key={companySectionData._id}
+                title={companySectionData.title}
+                subtitle={companySectionData.subtitle}
+                companies={pageData.companies}
+              />
+            )}
           </>
         )
       )}
