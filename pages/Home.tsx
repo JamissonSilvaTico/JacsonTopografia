@@ -101,6 +101,7 @@ const Home: React.FC = () => {
           companies: companiesData || [],
           projects: projectsData || [],
         });
+        // FIX: Corrected invalid `catch (error) =>` syntax to `catch (error)`.
       } catch (error) {
         console.error("Falha ao carregar os dados da página inicial:", error);
         setPageData({
@@ -116,6 +117,12 @@ const Home: React.FC = () => {
     fetchAllData();
   }, []);
 
+  const companySectionData = pageData?.sections.find(
+    (s) => s.type === "companies"
+  );
+  const otherSections =
+    pageData?.sections.filter((s) => s.type !== "companies") || [];
+
   return (
     <>
       <Hero />
@@ -126,7 +133,7 @@ const Home: React.FC = () => {
       ) : (
         pageData && (
           <>
-            {pageData.sections.map((section, index) => {
+            {otherSections.map((section, index) => {
               if (!section.visible) {
                 return null;
               }
@@ -243,17 +250,6 @@ const Home: React.FC = () => {
                     </div>
                   );
 
-                case "companies":
-                  if (pageData.companies.length === 0) return null;
-                  return (
-                    <CompaniesSection
-                      key={section._id}
-                      title={section.title}
-                      subtitle={section.subtitle}
-                      companies={pageData.companies}
-                    />
-                  );
-
                 case "projects":
                   if (pageData.projects.length === 0) return null;
                   return (
@@ -310,6 +306,17 @@ const Home: React.FC = () => {
                   return null;
               }
             })}
+
+            {companySectionData &&
+              companySectionData.visible &&
+              pageData.companies.length > 0 && (
+                <CompaniesSection
+                  key={companySectionData._id}
+                  title={companySectionData.title}
+                  subtitle={companySectionData.subtitle}
+                  companies={pageData.companies}
+                />
+              )}
           </>
         )
       )}
