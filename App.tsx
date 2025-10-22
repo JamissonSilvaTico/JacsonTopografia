@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ServicePage from "./pages/ServicePage";
+import ProjectPage from "./pages/ProjectPage";
 import LoginPage from "./pages/admin/LoginPage";
 import AdminLayout from "./pages/admin/AdminLayout";
 import DashboardPage from "./pages/admin/DashboardPage";
@@ -22,6 +23,7 @@ import AboutEditorPage from "./pages/admin/AboutEditorPage";
 import SiteSettingsPage from "./pages/admin/SiteSettingsPage";
 import HomePageSectionsPage from "./pages/admin/HomePageSectionsPage";
 import CompaniesEditorPage from "./pages/admin/CompaniesEditorPage";
+import ProjectsEditorPage from "./pages/admin/ProjectsEditorPage";
 
 const AppContent: React.FC = () => {
   const location = useLocation();
@@ -42,6 +44,7 @@ const AppContent: React.FC = () => {
           <Route path="/sobre" element={<AboutPage />} />
           <Route path="/contato" element={<ContactPage />} />
           <Route path="/servicos/:serviceId" element={<ServicePage />} />
+          <Route path="/projetos/:projectId" element={<ProjectPage />} />
 
           {/* Admin Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -58,6 +61,7 @@ const AppContent: React.FC = () => {
             <Route path="hero" element={<HeroEditorPage />} />
             <Route path="home-sections" element={<HomePageSectionsPage />} />
             <Route path="companies" element={<CompaniesEditorPage />} />
+            <Route path="projects" element={<ProjectsEditorPage />} />
             <Route path="about" element={<AboutEditorPage />} />
             <Route path="settings" element={<SiteSettingsPage />} />
             <Route path="profile" element={<ProfilePage />} />

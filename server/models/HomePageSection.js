@@ -7,7 +7,7 @@ const homePageSectionSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ["text", "services", "companies"],
+    enum: ["text", "services", "companies", "projects"],
     default: "text",
   },
   order: { type: Number, default: 0 },

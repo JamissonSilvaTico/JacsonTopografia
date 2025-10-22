@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { getServices } from "../api/serviceService";
+import { getProjects } from "../api/projectService";
 import { getSiteSettings } from "../api/settingsService";
-import { Service, SiteSettings } from "../types";
+import { Service, Project, SiteSettings } from "../types";
 
-const ServicesDropdown: React.FC<{
-  services: Service[];
+const DropdownMenu: React.FC<{
+  items: { id: string; title: string }[];
+  path: string;
   onClose: () => void;
-}> = ({ services, onClose }) => {
+}> = ({ items, path, onClose }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -36,15 +38,15 @@ const ServicesDropdown: React.FC<{
         aria-orientation="vertical"
         aria-labelledby="options-menu"
       >
-        {services.map((service) => (
+        {items.map((item) => (
           <Link
-            key={service.id}
-            to={`/servicos/${service.id}`}
+            key={item.id}
+            to={`/${path}/${item.id}`}
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
             role="menuitem"
             onClick={onClose}
           >
-            {service.title}
+            {item.title}
           </Link>
         ))}
       </div>
@@ -54,8 +56,10 @@ const ServicesDropdown: React.FC<{
 
 const Header: React.FC = () => {
   const [isServicesOpen, setServicesOpen] = useState(false);
+  const [isProjectsOpen, setProjectsOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [services, setServices] = useState<Service[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
   useEffect(() => {
@@ -67,6 +71,14 @@ const Header: React.FC = () => {
         console.error("Failed to fetch services:", error);
       }
     };
+    const fetchProjects = async () => {
+      try {
+        const data = await getProjects();
+        setProjects(data);
+      } catch (error) {
+        console.error("Failed to fetch projects:", error);
+      }
+    };
     const fetchSettings = async () => {
       try {
         const data = await getSiteSettings();
@@ -76,6 +88,7 @@ const Header: React.FC = () => {
       }
     };
     fetchServices();
+    fetchProjects();
     fetchSettings();
   }, []);
 
@@ -153,9 +166,39 @@ const Header: React.FC = () => {
                   </svg>
                 </button>
                 {isServicesOpen && (
-                  <ServicesDropdown
-                    services={services}
+                  <DropdownMenu
+                    items={services}
+                    path="servicos"
                     onClose={() => setServicesOpen(false)}
+                  />
+                )}
+              </div>
+              <div className="relative">
+                <button
+                  onClick={() => setProjectsOpen(!isProjectsOpen)}
+                  className={`${navLinkClasses} inline-flex items-center`}
+                  disabled={projects.length === 0}
+                >
+                  <span>Projetos</span>
+                  <svg
+                    className="ml-2 -mr-1 h-5 w-5"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                {isProjectsOpen && (
+                  <DropdownMenu
+                    items={projects}
+                    path="projetos"
+                    onClose={() => setProjectsOpen(false)}
                   />
                 )}
               </div>
@@ -276,6 +319,7 @@ const Header: React.FC = () => {
             >
               Sobre
             </NavLink>
+
             <p className="px-3 py-2 text-sm font-medium text-gray-500">
               Serviços:
             </p>
@@ -289,10 +333,25 @@ const Header: React.FC = () => {
                 {service.title}
               </Link>
             ))}
+
+            <p className="px-3 pt-4 pb-2 text-sm font-medium text-gray-500">
+              Projetos:
+            </p>
+            {projects.map((project) => (
+              <Link
+                key={project.id}
+                to={`/projetos/${project.id}`}
+                className="block pl-8 pr-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {project.title}
+              </Link>
+            ))}
+
             <NavLink
               to="/contato"
               className={({ isActive }) =>
-                `block ${getNavLinkClass({ isActive })}`
+                `block ${getNavLinkClass({ isActive })} pt-4`
               }
               onClick={() => setMobileMenuOpen(false)}
             >

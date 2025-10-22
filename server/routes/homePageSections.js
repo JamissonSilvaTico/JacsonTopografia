@@ -100,7 +100,7 @@ router.delete("/:id", protect, async (req, res) => {
 
     if (section) {
       // Prevent deletion of system sections to avoid breaking site logic
-      if (section.type === "services" || section.type === "companies") {
+      if (["services", "companies", "projects"].includes(section.type)) {
         return res
           .status(400)
           .json({

@@ -7,6 +7,7 @@ import connectDB from "./db.js";
 import seedDatabase from "./utils/seedDatabase.js";
 
 import serviceRoutes from "./routes/services.js";
+import projectRoutes from "./routes/projects.js";
 import contentRoutes from "./routes/content.js";
 import authRoutes from "./routes/auth.js";
 import settingsRoutes from "./routes/settings.js";
@@ -57,6 +58,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/services", serviceRoutes);
+app.use("/api/projects", projectRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/settings", settingsRoutes);

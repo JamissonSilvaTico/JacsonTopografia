@@ -6,6 +6,14 @@ export interface Service {
   imageUrl: string;
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  shortDescription: string;
+  longDescription: string;
+  imageUrl: string;
+}
+
 export interface HeroContent {
   mainTitle: string;
   subtitle: string;
@@ -20,7 +28,7 @@ export interface HomePageSection {
   title: string;
   subtitle?: string;
   content?: string;
-  type: "text" | "services" | "companies";
+  type: "text" | "services" | "companies" | "projects";
   order: number;
   visible: boolean;
   imageUrl?: string;

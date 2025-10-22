@@ -5,6 +5,7 @@ import HomePageSection from "../models/HomePageSection.js";
 import AboutPageContent from "../models/AboutPageContent.js";
 import SiteSettings from "../models/SiteSettings.js";
 import Company from "../models/Company.js";
+import Project from "../models/Project.js";
 import { seedServices } from "../data/seedData.js";
 
 const seedHeroContent = {
@@ -39,6 +40,13 @@ const seedHomePageSections = [
     subtitle: "Confiança e credibilidade no mercado.",
     type: "companies",
     order: 3,
+    visible: true,
+  },
+  {
+    title: "Projetos",
+    subtitle: "Conheça alguns dos nossos trabalhos",
+    type: "projects",
+    order: 4,
     visible: true,
   },
 ];
@@ -152,6 +160,12 @@ const seedDatabase = async () => {
       console.log("No companies found, seeding companies...");
       await Company.insertMany(seedCompanies);
       console.log("Companies seeded successfully.");
+    }
+
+    // Seed Projects
+    const projectCount = await Project.countDocuments();
+    if (projectCount === 0) {
+      console.log("No projects found, project collection is empty.");
     }
   } catch (error) {
     console.error("Error seeding database:", error);
