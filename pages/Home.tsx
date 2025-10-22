@@ -116,12 +116,6 @@ const Home: React.FC = () => {
     fetchAllData();
   }, []);
 
-  const companySectionData = pageData?.sections.find(
-    (s) => s.type === "companies"
-  );
-  const otherSections =
-    pageData?.sections.filter((s) => s.type !== "companies") || [];
-
   return (
     <>
       <Hero />
@@ -132,7 +126,7 @@ const Home: React.FC = () => {
       ) : (
         pageData && (
           <>
-            {otherSections.map((section, index) => {
+            {pageData.sections.map((section, index) => {
               if (!section.visible) {
                 return null;
               }
@@ -300,20 +294,24 @@ const Home: React.FC = () => {
                       </div>
                     </div>
                   );
+                case "companies":
+                  return (
+                    <div
+                      key={section._id}
+                      className={`py-16 sm:py-24 ${bgColor}`}
+                    >
+                      <CompaniesSection
+                        title={section.title}
+                        subtitle={section.subtitle}
+                        companies={pageData.companies}
+                      />
+                    </div>
+                  );
 
                 default:
                   return null;
               }
             })}
-
-            {companySectionData && companySectionData.visible && (
-              <CompaniesSection
-                key={companySectionData._id}
-                title={companySectionData.title}
-                subtitle={companySectionData.subtitle}
-                companies={pageData.companies}
-              />
-            )}
           </>
         )
       )}
