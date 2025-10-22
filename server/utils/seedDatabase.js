@@ -130,13 +130,24 @@ const seedDatabase = async () => {
       console.log("Hero content seeded successfully.");
     }
 
-    // Seed Home Page Sections
-    const homeSectionsCount = await HomePageSection.countDocuments();
-    if (homeSectionsCount === 0) {
-      console.log("No home page sections found, seeding...");
-      await HomePageSection.insertMany(seedHomePageSections);
-      console.log("Home page sections seeded successfully.");
+    // Seed Home Page Sections (Idempotent)
+    console.log("Checking and seeding home page sections if necessary...");
+    for (const sectionData of seedHomePageSections) {
+      // For system sections, the 'type' is unique. For the initial text section, we check by title as well to prevent duplicates.
+      const query =
+        sectionData.type !== "text"
+          ? { type: sectionData.type }
+          : { type: "text", title: sectionData.title };
+
+      const sectionExists = await HomePageSection.findOne(query);
+      if (!sectionExists) {
+        console.log(
+          `Seeding '${sectionData.title}' (${sectionData.type}) section...`
+        );
+        await HomePageSection.create(sectionData);
+      }
     }
+    console.log("Home page sections check complete.");
 
     // Seed About Page Content
     const aboutPageContentCount = await AboutPageContent.countDocuments();
